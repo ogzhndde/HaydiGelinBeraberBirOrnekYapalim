@@ -10,19 +10,20 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public Animator playerAnim;
     public GameObject box;
-
     public GameObject bluePoint, greenPoint, redPoint;
-
     public List<GameObject> collectedBox = new List<GameObject>();
+
 
     void Start()
     {
+        //YUKARIDA TANIMLADIGIMIZ DEGISKENLERI SURUKLE BIRAK YERINE DIREK KODDAN ATAMA YAPIYORUZ
         rb = GetComponent<Rigidbody>();
         playerAnim = GetComponent<Animator>();
     }
 
     void Update()
     {
+        //JOYSTICK ILE KARAKTERIN HAREKET ETTIRILDIGI YER
         if (joystickBackground.activeInHierarchy)
         {
             playerAnim.SetBool("isRunning", true);
@@ -62,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
 
             case "Point":
+                //FOR DONGUSUYLE LISTEMIZDEKI TUM OBJELERIN TAG'LERINE GORE ESLESTIRIP KONUMLARINI GUNCELLIYORUZ
                 for (int i = 0; i < collectedBox.Count; i++)
                 {
                     if (collectedBox[i].tag == "Blue")
@@ -89,12 +91,17 @@ public class PlayerMovement : MonoBehaviour
 
     public void TriggerControl(Color boxColor, string tag)
     {
+        //KAFAMIZIN USTUNDE BIRIKTIRECEGIMIZ BOSLARIN SPAWNLANDIGI YER
         GameObject spawnedBox = Instantiate(box, transform.position, Quaternion.identity);
 
+        //INSTANTIATE ETTIGIMIZ OBJEYI LISTEYE EKLIYORUZ
         collectedBox.Add(spawnedBox);
+
+        //LISTENIN KONUMUNU GUNCELLIYORUZ
         spawnedBox.transform.position = (transform.position + new Vector3(0, 2, 0)) + (new Vector3(0, 0.5f, 0) * collectedBox.Count);
         // spawnedBox.transform.position =        (ilk konum)                        +            (ekleme yapilan kisim)           ;
 
+        //OBJEYI LISTEYE EKLIYORUZ VE RENK-TAG AYARLARINI YAPIYORUZ
         spawnedBox.transform.SetParent(transform);
         spawnedBox.GetComponent<MeshRenderer>().material.color = boxColor;
         spawnedBox.tag = tag;
